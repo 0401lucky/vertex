@@ -28,6 +28,7 @@ RUN chmod +x /app/entrypoint.sh
 ENV VPROXY_CONFIG=/app/config/config.json
 ENV VPROXY_API_KEYS=/app/config/api_keys.txt
 ENV VPROXY_MODELS=/app/config/models.json
+ENV VPROXY_RULES_AGREED_HASH=1f345592160d2f04
 
 EXPOSE 2156
 
