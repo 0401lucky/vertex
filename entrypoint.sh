@@ -20,11 +20,10 @@ if [ ! -f "$VPROXY_MODELS" ]; then
     cp /app/models.json "$VPROXY_MODELS"
 fi
 
-# Zeabur 等容器平台可能不方便在崩溃循环时手动创建同意文件。
-# 用户显式配置当前规则哈希后，由启动脚本写入 Docker 同意凭证。
+# Zeabur 的配置文件可能以只读方式挂载，入口脚本不再写同意文件。
+# 用户显式配置当前规则哈希后，由 Go 程序直接校验环境变量。
 if [ -n "$VPROXY_RULES_AGREED_HASH" ]; then
-    echo "[Entrypoint] 检测到 VPROXY_RULES_AGREED_HASH，正在写入 Docker 规则同意文件..."
-    printf '%s\n' "$VPROXY_RULES_AGREED_HASH" > /app/config/agreed-rules-docker.txt
+    echo "[Entrypoint] 检测到 VPROXY_RULES_AGREED_HASH，将通过环境变量完成 Docker 规则同意校验。"
 fi
 
 # 使用 exec 确保系统信号能够直接透传给 Go 程序，支持 SIGHUP 配置热重载
